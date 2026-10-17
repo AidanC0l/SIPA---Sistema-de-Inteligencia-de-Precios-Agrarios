@@ -93,11 +93,19 @@ void registrarCosecha() {
 
     var opcionOrigen = leerOpcion("Seleccione el origen: ", 1, 3);
 
+
     var fletePorTonelada = switch (opcionOrigen) {
         case 1 -> 120000.0;
         case 2 -> 180000.0;
         case 3 -> 150000.0;
         default -> 0.0;
+    };
+
+    var origen = switch (opcionOrigen) {
+        case 1 -> "Boyacá";
+        case 2 -> "Huila";
+        case 3 -> "Antioquia";
+        default -> "Desconocido";
     };
 
     var flete = toneladas * fletePorTonelada;
@@ -118,7 +126,7 @@ void registrarCosecha() {
     var impuestos = iva + retencion;
     var utilidad = subtotal - impuestos - flete;
 
-    // Guardar los resultados para el reporte final
+    //Guarda los resultados para el reporte final
     ultimoProducto = producto;
     ultimoSubtotal = subtotal;
     ultimoIVA = iva;
@@ -127,10 +135,7 @@ void registrarCosecha() {
     ultimaUtilidad = utilidad;
     hayCosecha = true;
 
-    mostrarResultadoCosecha(
-        producto, origen, toneladas, kilos, precio,
-        subtotal, iva, retencion, flete, utilidad
-    );
+    mostrarResultadoCosecha(producto, origen, toneladas, kilos, precio,subtotal, iva, retencion, flete, utilidad);
 }
 
 void mostrarResultadoCosecha( String producto, String origen, double toneladas, double kilos, double precio, double subtotal, double iva, double retencion, double flete, double utilidad) {
@@ -283,5 +288,108 @@ void configurarAgricultor() {
     System.out.println("Configuración guardada correctamente.");
 }
 
+void generarReporte() {
+    var detalleCosecha = hayCosecha
+        ? """
+            Último producto: %s
+            Subtotal bruto: %s
+            IVA: %s
+            Retención en la fuente: %s
+            Total de impuestos y retención: %s
+            Flete final: %s
+            UTILIDAD NETA: %s
+            """.formatted(
+                ultimoProducto,
+                formatoCOP(ultimoSubtotal),
+                formatoCOP(ultimoIVA),
+                formatoCOP(ultimaRetencion),
+                formatoCOP(ultimoIVA + ultimaRetencion),
+                formatoCOP(ultimoFlete),
+                formatoCOP(ultimaUtilidad)
+            )
+        : "No se ha registrado ninguna cosecha.\n";
+        
+    var reporte = """
+            ==========================================
+                    REPORTE FINAL DE SIPA
+            ==========================================
+            Agricultor: %s
+            Finca: %s
+            ------------------------------------------
+            RESUMEN DE LA ÚLTIMA COSECHA
+            %s
+            ==========================================
+            Gracias por usar SIPA.
+            ¡Buen provecho con su cosecha!
+            ==========================================
+            """.formatted(
+                nombreAgricultor,
+                nombreFinca,
+                detalleCosecha
+            );
 
+    System.out.println(reporte);
+}
+
+int leerOpcion(String mensaje, int minimo, int maximo) {
+    var opcion = -1;
+    var valida = false;
+
+    do {
+        System.out.print(mensaje);
+        var entrada = scanner.nextLine().trim();
+
+        try {
+            opcion = Integer.parseInt(entrada);
+            valida = opcion >= minimo && opcion <= maximo;
+
+            if (!valida) {
+                System.out.println(
+                    "Ingrese una opción entre "
+                    + minimo + " y " + maximo + "."
+                );
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: debe ingresar un número entero.");
+        }
+    } while (!valida);
+
+    return opcion;
+}
+
+double leerDecimalNoNegativo(String mensaje) {
+    var numero = -1.0;
+    var valido = false;
+
+    do {
+        System.out.print(mensaje);
+        var entrada = scanner.nextLine().trim().replace(',', '.');
+
+        try {
+            numero = Double.parseDouble(entrada);
+            valido = Double.isFinite(numero) && numero >= 0;
+
+            if (!valido) {
+                System.out.println(
+                    "Error: ingrese un número válido mayor o igual a cero."
+                );
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: ingrese un valor numérico válido.");
+        }
+    } while (!valido);
+
+    return numero;
+}
+
+String formatoCOP(double valor) {
+    var formato = NumberFormat.getNumberInstance(
+        Locale.forLanguageTag("es-CO")
+    );
+
+    formato.setMaximumFractionDigits(2);
+    formato.setMinimumFractionDigits(0);
+
+    return "$" + formato.format(valor) + " COP";
+}
 
