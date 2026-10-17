@@ -257,3 +257,31 @@ void simularPuntoEquilibrio() {
     System.out.println(resultado);
 }
 
+void configurarAgricultor() {
+
+    System.out.println("\n--- CONFIGURACIÓN DE AGRICULTOR ---");
+
+    System.out.print("Ingrese el nombre del agricultor: ");
+    var nombre = scanner.nextLine().trim();
+
+    while (nombre.isBlank()) {
+        System.out.print("El nombre no puede estar vacío. Intente nuevamente: ");
+        nombre = scanner.nextLine().trim();
+    }
+
+    System.out.print("Ingrese el nombre de la finca: ");
+    var finca = scanner.nextLine().trim();
+
+    while (finca.isBlank()) {
+        System.out.print("El nombre de la finca no puede estar vacío. Intente nuevamente: ");
+        finca = scanner.nextLine().trim();
+    }
+
+    nombreAgricultor = nombre;
+    nombreFinca = finca;
+
+    System.out.println("Configuración guardada correctamente.");
+}
+
+
+
