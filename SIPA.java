@@ -157,3 +157,50 @@ void mostrarResultadoCosecha( String producto, String origen, double toneladas, 
     System.out.println(reporte);
 }
 
+void mostrarGlosario() {
+    var continuar = true;
+
+    while (continuar) {
+        System.out.println("""
+                --- GLOSARIO SIPA ---
+                1. Punto de equilibrio
+                2. Retención en la fuente
+                3. Arancel logístico
+                4. Volver al menú principal
+                """);
+
+        var opcion = leerOpcion("Seleccione un concepto: ", 1, 4);
+
+        var definicion = switch (opcion) {
+            case 1 -> """
+                    PUNTO DE EQUILIBRIO
+
+                    Es el nivel de ventas donde los ingresos
+                    igualan a los costos totales; es decir,
+                    donde no hay pérdida ni ganancia.
+                    """;
+            case 2 -> """
+                    RETENCIÓN EN LA FUENTE
+
+                    Es un mecanismo de recaudo anticipado
+                    de impuestos que el comprador descuenta
+                    del pago total al agricultor.
+                    """;
+            case 3 -> """
+                    ARANCEL LOGÍSTICO
+
+                    Costo adicional aplicado a mercancías
+                    destinadas a la exportación para cubrir
+                    trámites portuarios.
+                    """;
+            default -> "";
+        };
+
+        if (opcion == 4) {
+            continuar = false;
+        } else {
+            System.out.println(definicion);
+        }
+    }
+}
+
