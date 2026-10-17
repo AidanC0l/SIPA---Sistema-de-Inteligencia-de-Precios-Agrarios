@@ -158,6 +158,7 @@ void mostrarResultadoCosecha( String producto, String origen, double toneladas, 
 }
 
 void mostrarGlosario() {
+
     var continuar = true;
 
     while (continuar) {
@@ -202,5 +203,57 @@ void mostrarGlosario() {
             System.out.println(definicion);
         }
     }
+}
+
+void simularPuntoEquilibrio() {
+
+    System.out.println("\n--- SIMULADOR DE PUNTO DE EQUILIBRIO ---");
+
+    var costosFijos = leerDecimalNoNegativo("Ingrese los costos fijos totales: ");
+
+    double precioVenta;
+    double costoVariable;
+    double margen;
+
+    do {
+        precioVenta = leerDecimalNoNegativo(
+            "Ingrese el precio de venta por unidad: "
+        );
+
+        costoVariable = leerDecimalNoNegativo(
+            "Ingrese el costo variable por unidad: "
+        );
+
+        margen = precioVenta - costoVariable;
+
+        if (margen <= 0) {
+            System.out.println(
+                "Error: el precio de venta debe ser mayor "
+                + "que el costo variable. Intente nuevamente."
+            );
+        }
+    } while (margen <= 0);
+
+    var unidades = Math.ceil(costosFijos / margen);
+
+    var resultado = """
+            ==========================================
+                SIMULACIÓN DE PUNTO DE EQUILIBRIO
+            ==========================================
+            Costos fijos: %s
+            Precio de venta por unidad: %s
+            Costo variable por unidad: %s
+            Margen por unidad: %s
+            Unidades mínimas necesarias: %.0f
+            ==========================================
+            """.formatted(
+                formatoCOP(costosFijos),
+                formatoCOP(precioVenta),
+                formatoCOP(costoVariable),
+                formatoCOP(margen),
+                unidades
+            );
+
+    System.out.println(resultado);
 }
 
