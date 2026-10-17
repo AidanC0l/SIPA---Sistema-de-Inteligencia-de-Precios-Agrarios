@@ -133,3 +133,27 @@ void registrarCosecha() {
     );
 }
 
+void mostrarResultadoCosecha( String producto, String origen, double toneladas, double kilos, double precio, double subtotal, double iva, double retencion, double flete, double utilidad) {
+
+    var reporte = """
+    =======================================
+            RESULTADO DE LA COSECHA        
+    =======================================
+    Producto: %s
+    Origen: %s
+    Toneladas: %.2f
+    Kilogramos: %.2f
+    Precio por kg: %s
+    ---------------------------------------
+    Subtotal bruto: %s
+    IVA: %s
+    Retención en la fuente: %s
+    Flete final: %s
+    ---------------------------------------
+    UTILIDAD NETA: %s
+    =======================================
+    """.formatted(producto, origen, toneladas, kilos, formatoCOP(precio), formatoCOP(subtotal), formatoCOP(iva), formatoCOP(retencion), formatoCOP(flete), formatoCOP(utilidad));
+
+    System.out.println(reporte);
+}
+
