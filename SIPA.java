@@ -49,3 +49,87 @@ void mostrarMenu() {
 
     System.out.print(menu);
 }
+
+void registrarCosecha() {
+    System.out.println("\n--- SELECCIÓN DE PRODUCTO ---");
+    System.out.println("1. Papa capira");
+    System.out.println("2. Café Pergamino");
+    System.out.println("3. Aguacate Hass");
+
+    var opcionProducto = leerOpcion("Seleccione el producto: ", 1, 3);
+
+    var producto = switch (opcionProducto) {
+        case 1 -> "Papa capira";
+        case 2 -> "Café Pergamino";
+        case 3 -> "Aguacate Hass";
+        default -> throw new IllegalStateException("Producto inválido");
+
+    };
+
+    var precio = switch (opcionProducto) {
+        case 1 -> 2500.0;
+        case 2 -> 15000.0;
+        case 3 -> 8000.0;
+        default -> 0.0;
+    };
+
+    var ivaPorcentaje = switch (opcionProducto) {
+        case 1, 3 -> 0.0;
+        case 2 -> 0.05;
+        default -> 0.0; 
+    };
+
+    System.out.println("\n--- VOLUMEN DE PRODUCCIÓN ---");
+    var toneladas = leerDecimalNoNegativo("Ingrese las toneladas cosechadas: ");
+
+    var kilos = toneladas * 1000;
+    var subtotal = kilos * precio;
+    var iva = subtotal * ivaPorcentaje;
+
+    System.out.println("\n--- ORIGEN DE LA COSECHA ---");
+    System.out.println("1. Boyacá");
+    System.out.println("2. Huila");
+    System.out.println("3. Antioquia");
+
+    var opcionOrigen = leerOpcion("Seleccione el origen: ", 1, 3);
+
+    var fletePorTonelada = switch (opcionOrigen) {
+        case 1 -> 120000.0;
+        case 2 -> 180000.0;
+        case 3 -> 150000.0;
+        default -> 0.0;
+    };
+
+    var flete = toneladas * fletePorTonelada;
+
+    System.out.println("\n--- DESTINO DE LA COSECHA ---");
+    System.out.println("1. Mercado local / Corabastos");
+    System.out.println("2. Exportación (puerto)");
+
+    var destino = leerOpcion("Seleccione el destino: ", 1, 2);
+
+    if (destino == 2) {
+        flete = flete * 1.15;
+    }
+
+    var retencionPorcentaje = subtotal > 4000000 ? 0.025 : 0.015;
+
+     var retencion = subtotal * retencionPorcentaje;
+    var impuestos = iva + retencion;
+    var utilidad = subtotal - impuestos - flete;
+
+    // Guardar los resultados para el reporte final
+    ultimoProducto = producto;
+    ultimoSubtotal = subtotal;
+    ultimoIVA = iva;
+    ultimaRetencion = retencion;
+    ultimoFlete = flete;
+    ultimaUtilidad = utilidad;
+    hayCosecha = true;
+
+    mostrarResultadoCosecha(
+        producto, origen, toneladas, kilos, precio,
+        subtotal, iva, retencion, flete, utilidad
+    );
+}
+
